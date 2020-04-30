@@ -1,5 +1,13 @@
 #!/bin/bash
 
+vpipe=/tmp/videopipe
+apipe=/tmp/audiopipe
+vw=1280
+vh=720
+fps=15
+rot=180
+key=$1
+
 if [ -z "$1" ]
   then
     echo "Usage: first argument must be the key"
@@ -23,13 +31,6 @@ cancelled(){
 
 trap cancelled EXIT
 
-vpipe=/tmp/videopipe
-apipe=/tmp/audiopipe
-vw=1280
-vh=720
-fps=15
-rot=180
-key=$1
 
 if [[ ! -p $vpipe ]]; then
     mkfifo $vpipe
