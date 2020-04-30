@@ -39,7 +39,7 @@ if [[ ! -p $apipe ]]; then
     mkfifo $apipe
 fi
 
-raspivid -t 0 -w $vw -h $vh $rot -o - > $vpipe &
+raspivid -t 0 -w $vw -h $vh -rot $rot -o - > $vpipe &
 
 arecord -D plughw:1,0 -r 44100 -c 4 > $apipe &
 
