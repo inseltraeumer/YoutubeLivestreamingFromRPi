@@ -4,7 +4,6 @@ vpipe=/tmp/videopipe
 apipe=/tmp/audiopipe
 vw=1280
 vh=720
-fps=15
 rot=180
 key=$1
 
@@ -26,7 +25,7 @@ cancelled(){
       echo "Removing videopipe..."
       rm $vpipe
   fi
-  echo "Bye!"
+  echo "\nBye!"
 }
 
 trap cancelled EXIT
@@ -40,20 +39,18 @@ if [[ ! -p $apipe ]]; then
     mkfifo $apipe
 fi
 
-raspivid -t 0 -w $vw -h $vh -fps $fps -rot $rot -o - > $vpipe &
+raspivid -t 0 -w $vw -h $vh $rot -o - > $vpipe &
 
 arecord -D plughw:1,0 -r 44100 -c 4 > $apipe &
 
 ffmpeg \
     -y \
-    -r $fps \
     -fflags nobuffer \
     -thread_queue_size 10240 \
     -i $vpipe \
     -fflags nobuffer \
     -analyzeduration 0 \
     -thread_queue_size 10240 \
-    -r $fps \
     -i $apipe \
     -map 0:0 \
     -map 1:0 \
