@@ -3,7 +3,7 @@
 vpipe=/tmp/videopipe
 apipe=/tmp/audiopipe
 fps=15
-vw=1138
+vw=1137
 vh=640
 rot=960
 key=$1
@@ -48,16 +48,18 @@ ffmpeg \
     -y \
     -r $fps \
     -fflags nobuffer \
-    -thread_queue_size 102400 \
+    -thread_queue_size 15000 \
     -i $vpipe \
     -fflags nobuffer \
     -analyzeduration 0 \
-    -thread_queue_size 102400 \
+    -thread_queue_size 15000 \
     -r $fps \
     -i $apipe \
     -map 0:0 \
     -map 1:0 \
     -filter:a aresample \
+    -af "highpass=f=100, lowpass=f=1000" \
+    -vsync 2 \
     -c:a aac \
     -c:v copy \
-    -f flv rtmp://a.rtmp.youtube.com/live2/$key 
+    -f flv rtmp://a.rtmp.youtube.com/live2/$key
