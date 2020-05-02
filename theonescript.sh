@@ -26,7 +26,7 @@ cancelled(){
       echo "Removing videopipe..."
       rm $vpipe
   fi
-  echo "\nBye!"
+  echo "Bye!"
 }
 
 trap cancelled EXIT
@@ -48,18 +48,17 @@ ffmpeg \
     -y \
     -r $fps \
     -fflags nobuffer \
-    -thread_queue_size 15000 \
+    -thread_queue_size 10240 \
     -i $vpipe \
     -fflags nobuffer \
     -analyzeduration 0 \
-    -thread_queue_size 15000 \
+    -thread_queue_size 10240 \
     -r $fps \
     -i $apipe \
     -map 0:0 \
     -map 1:0 \
     -filter:a aresample \
-    -af "highpass=f=100, lowpass=f=1000" \
-    -vsync 2 \
+    -filter:a "highpass=f=100, lowpass=f=1000" \
     -c:a aac \
     -c:v copy \
     -f flv rtmp://a.rtmp.youtube.com/live2/$key
